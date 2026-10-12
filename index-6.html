@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Family Development Roadmap — Draft 0.1</title>
+<style>
+:root{--bg:#f6f5f0;--card:#fff;--ink:#222;--muted:#6a6a63;--line:#deddd6;--accent:#345c4a;--soft:#e7eee9;--warn:#f4ead7}
+*{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}
+header{padding:28px 20px 18px;max-width:1100px;margin:auto} h1{margin:0 0 7px;font-size:clamp(28px,5vw,48px);line-height:1}
+.sub{color:var(--muted);max-width:780px;line-height:1.5}.pill{display:inline-block;padding:4px 9px;border:1px solid var(--line);border-radius:999px;font-size:12px;margin:2px}
+nav{position:sticky;top:0;background:rgba(246,245,240,.95);backdrop-filter:blur(8px);border-block:1px solid var(--line);z-index:2}
+nav .wrap{max-width:1100px;margin:auto;display:flex;gap:6px;padding:8px 20px;overflow:auto}
+button,select,input{font:inherit} button{border:1px solid var(--line);background:var(--card);padding:9px 12px;border-radius:9px;cursor:pointer;white-space:nowrap}
+button.active{background:var(--accent);color:white;border-color:var(--accent)}
+main{max-width:1100px;margin:auto;padding:20px}.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+select,input{border:1px solid var(--line);border-radius:9px;background:white;padding:9px 11px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 2px 8px #00000008}
+.card h3{margin:4px 0 8px}.card p{line-height:1.5;margin:7px 0}.meta{font-size:12px;color:var(--muted);margin-bottom:7px}
+.section{margin:26px 0}.section h2{font-size:23px;margin-bottom:11px}.now{border-top:4px solid var(--accent)}.soon{border-top:4px solid #9a7a3e}.later{border-top:4px solid #777}
+.readiness{background:var(--soft)} .discuss{background:var(--warn)}
+details{margin:8px 0} summary{cursor:pointer;font-weight:650}.principle{padding:12px 0;border-bottom:1px solid var(--line);line-height:1.5}
+.empty{padding:35px;text-align:center;color:var(--muted)}
+footer{max-width:1100px;margin:30px auto;padding:20px;color:var(--muted);font-size:13px}
+@media(max-width:600px){header{padding-top:20px}.controls>*{flex:1 1 100%}}
+</style></head>
+<body>
+<noscript><div style="max-width:1000px;margin:18px auto;padding:14px;background:#fff3cd;border:1px solid #d7b85b;border-radius:10px">This file viewer has JavaScript disabled. Open this HTML file in Safari or Chrome to use the roadmap.</div></noscript>
+<header>
+<span class="pill">DRAFT 0.1</span>
+<h1>Family Development Roadmap</h1>
+<p class="sub">A planning tool, not a childhood optimization engine. Age establishes a default; the actual child modifies readiness; parents choose the implementation.</p>
+</header>
+<nav><div class="wrap" id="tabs"></div></nav>
+<main>
+<div class="controls">
+<label id="ageControl">Age band <select id="age"></select></label>
+<label id="domainControl">Domain <select id="domain"></select></label>
+<input id="search" placeholder="Search roadmap…">
+</div>
+<div id="content"></div>
+</main>
+<footer>Draft 0.6 • Strong defaults, weak rigidity • Future Mom, Dad, actual child, and actual circumstances all get a vote.</footer>
+<script>
+const ages=["0–1","1–3","3–5","5–8","8–12","12–15","15–18"];
+const domains=["Sleep & rhythm","Food & cooking","Self-care & chores","Money","Play & independence","Physical","Learning","Chinese","Faith","Social & emotional","Media","Technology","Family & community"];
+const principles=[
+["Childhood is a gradual transfer of responsibility","Parent does → child participates → helps → does with supervision → owns → parent advises."],
+["Build competence, not dependence","The endpoint is a capable adult, not an exceptionally well-managed child."],
+["Strong defaults, weak rigidity","Healthy rhythms matter; so does being able to bend them and return."],
+["Protect unstructured childhood","Boredom, free play, siblings, books, building, outdoors and invented games are not empty space."],
+["Real life is educational","Cook, travel, host, worship, shop, navigate, lose games and do actual work before inventing simulations."],
+["Relationships matter more than programs","Family, grandparents, siblings, friends and church carry development that curricula cannot replace."],
+["Shared family culture before individualized consumption","Meals, read-alouds, couch multiplayer, movies, church, trips and cooking together."],
+["Freedom follows demonstrated competence","Age matters, but judgment, reliability and consequences of failure matter too."],
+["Ordinary failure is useful; dangerous failure isn't","Allow manageable risk and mistakes while controlling genuine hazards."],
+["Feelings matter; they don't govern everything","Parent regulation → co-regulation → self-regulation."],
+["Don't turn childhood into a reward economy","Separate allowance, chores, temporary incentives, paid extra work and celebrations."],
+["Exposure first; specialization later","Offer a broad buffet, then support depth when genuine interests emerge."],
+["Equal doesn't mean identical","Different children can fairly have different help, freedoms, activities and expectations."],
+["Actual child overrides roadmap","Temperament, needs, abilities and circumstances modify implementation."],
+["Delay decisions when the information doesn't exist yet","Future parents and the future child should decide future-specific questions."]
+];
+const items=[
+["0–1","Sleep & rhythm","Core","Proposed","now","Safe sleep, adequate total sleep, and a repeatable but flexible family rhythm.","Parents regulate nearly everything; exact sleep-training method is a later family choice."],
+["0–1","Food & cooking","Core","Proposed","now","Milk feeding first; around developmental readiness, begin varied solids, textures and family flavors.","Exposure matters more than elaborate baby cuisine."],
+["0–1","Physical","Core","Proposed","now","Floor time, tummy time, reaching, rolling, crawling and ordinary movement.","No toddler exercise program required."],
+["0–1","Learning","Core","Proposed","now","Talk, respond, sing, read, name things and let him explore normal life.","Language and exploration are the academics."],
+["0–1","Chinese","High value","Proposed","now","Make Chinese a normal relationship language through parents, grandparents, songs and books.","People first; lessons later."],
+["0–1","Faith","High value","Proposed","now","Church, prayer, songs, Scripture around him and being known by the congregation.","No formal devotional pressure."],
+["0–1","Play & independence","High value","Proposed","now","Interact warmly while also letting a content baby look, grab, babble and occupy himself.","Constant entertainment is not required."],
+["0–1","Media","Optional","Proposed","later","Little ordinary entertainment screen need; video calls are different.","Family media can begin later without rushing personal screens."],
+["1–3","Food & cooking","Core","Proposed","now","Move toward ordinary family food; parents choose what/when/where, child chooses whether/how much.","Include a familiar option without routinely cooking Meal #2."],
+["1–3","Self-care & chores","High value","Proposed","now","Participate: toys in basket, clothes in hamper, wipe spills, carry dishes, help dress and wash.","Helping, not a wage job."],
+["1–3","Play & independence","Core","Proposed","now","Normalize independent play and boredom alongside engaged parent play.","Don't turn every activity into a lesson."],
+["1–3","Social & emotional","Core","Proposed","now","Name basic feelings, co-regulate, hold boundaries, and begin simple repair after harm.","Feelings are legitimate information, not automatic instructions."],
+["1–3","Chinese","High value","Proposed","now","Build everyday family speech and comprehension.","Conversation remains more important than character study."],
+["1–3","Physical","High value","Proposed","now","Run, climb, throw, kick, dance, playground, water familiarity and balance-bike opportunities.","Movement buffet over organized sport."],
+["3–5","Self-care & chores","High value","Proposed","now","Small recurring jobs and growing dressing/toileting/hygiene responsibility.","Accept harmlessly imperfect work."],
+["3–5","Food & cooking","High value","Proposed","now","Stir, pour, tear, wash, spread, assemble, measure and use age-appropriate cutting tools.","Participation now builds later competence."],
+["3–5","Play & independence","Core","Proposed","now","Protect large unstructured blocks and allow manageable physical risk.","Risk can teach; hazards need controlling."],
+["3–5","Social & emotional","Core","Proposed","now","Practice sharing, waiting, conflict, apologies with repair, manners and friendship.","Ordinary conflict is curriculum."],
+["3–5","Faith","High value","Proposed","now","Short pleasant family devotional rhythm, children's Bible, simple prayer and catechism.","Introduction, not performance."],
+["3–5","Media","High value","Proposed","now","Curated family TV and games can become normal entertainment.","Shared screens before personal devices."],
+["3–5","Technology","Optional","Proposed","later","Use household screens in common spaces; no developmental need for a personal tablet.","The household owns the screen, not the child."],
+["5–8","Learning","Core","Proposed","now","Build English reading through decoding/fluency plus rich read-alouds, writing, arithmetic and general knowledge.","Don't turn home into Second School when school is working."],
+["5–8","Money","High value","Proposed","now","Begin modest weekly allowance when finite/exchangeable money makes sense.","Allowance teaches management; ordinary chores remain unpaid."],
+["5–8","Physical","Core","Proposed","now","Build functional swimming, biking and fundamental movement; sample organized sports without specialization.","Find enjoyable ways to move."],
+["5–8","Food & cooking","High value","Proposed","now","Make simple snacks and foods; learn knife/stove safety progressively and clean afterward.","Cooking without cleanup transfers labor."],
+["5–8","Play & independence","High value","Proposed","now","Expand territory, friend play and self-directed time based on judgment and local environment.","Age unlocks nothing automatically."],
+["5–8","Technology","High value","Proposed","now","Teach real-computer basics: keyboard, mouse, files, typing, creating and searching with support.","Computing competence can advance without personal-device ownership."],
+["5–8","Chinese","High value","Proposed","now","Keep spontaneous family speech strong; begin deliberate literacy depending on school route.","If dual-language school is strong, let school carry systematic literacy."],
+["5–8","Faith","High value","Proposed","now","Shift increasingly toward actual Scripture, questions, prayer participation and meaningful church service.","Memorization provides hooks, not proof of understanding."],
+["5–8","Social & emotional","High value","Proposed","now","Manage more friendship, losing, exclusion, compromise and adult interaction personally.","Kindness is required; friendship isn't."],
+["8–12","Self-care & chores","Core","Proposed","now","Own meaningful household work: laundry, dishes, cleaning, packing and broader competence.","Begin noticing work without being prompted every time."],
+["8–12","Food & cooking","High value","Proposed","now","Own parts of meals: choose, check ingredients, shop, cook and clean with decreasing help.","Real-life executive function."],
+["8–12","Money","High value","Proposed","now","Manage more discretionary expenses; allow low-stakes bad purchases without rescue advances.","Transfer expenses as competence grows."],
+["8–12","Play & independence","High value","Proposed","now","Progress through navigation, neighborhood freedom and home-alone readiness.","Know address, routes, lost plan, road safety and emergency contacts."],
+["8–12","Learning","High value","Proposed","now","Teach how to learn: sources, notes, project breakdown, memorization, checking work and early AI literacy.","Attempt → think → tools → evaluate."],
+["8–12","Chinese","High value","Proposed","now","Protect spoken Chinese and grow useful literacy; recurring China summers can make the language socially necessary.","Relationship language first; literacy expands usefulness."],
+["8–12","Technology","High value","Proposed","now","Teach internet literacy on managed/shared hardware; personal internet-connected devices remain optional.","Internet access does not equal internet freedom."],
+["8–12","Social & emotional","High value","Proposed","now","Deepen friendship skills, resilience, empathy, self-advocacy and talking to adults.","Home should be safe to report social problems without automatic escalation."],
+["12–15","Technology","Discuss","Discuss later","now","Reassess actual communication needs; a personal communication device need not mean unrestricted smartphone or social media.","Current family inclination: substantially later personal connected devices."],
+["12–15","Learning","High value","Discuss later","now","Transfer school workflow and learning management while supporting genuine areas of depth.","Grades are information, not identity."],
+["12–15","Play & independence","High value","Discuss later","now","Transfer substantial ownership of free time, friends, schedule and ordinary decisions.","Parents retain safety guardrails."],
+["12–15","Faith","High value","Discuss later","now","Make hard questions safe: doctrine, doubt, science, suffering, sexuality, other religions and church failures.","Family faith must increasingly become personally evaluated."],
+["12–15","Social & emotional","Core","Discuss later","now","Parents move backstage while preserving availability, safety, respectful disagreement and relationship.","Privacy grows; safety can override it."],
+["15–18","Family & community","Core","Discuss later","now","Adulthood apprenticeship: progressively transfer real adult responsibilities before adulthood arrives.","Future family should decide specifics with the actual teenager."],
+["15–18","Technology","High value","Discuss later","now","Move toward adult digital autonomy, with privacy and self-management replacing surveillance.","Don't maintain childhood controls until midnight on the 18th birthday."],
+["15–18","Money","Core","Discuss later","now","Own increasingly real budgeting, work, spending and financial decisions.","Exact handoff should reflect circumstances then."],
+["15–18","Food & cooking","Core","Discuss later","now","Graduate able to grocery shop, handle food safely, improvise and cook several reliable meals.","Takeout should not be the only alternative to starvation."],
+];
+const readiness={
+"0–1|Sleep & rhythm":[
+["Right Now","Parents own sleep regulation: safe sleep environment, day/night cues, feeding needs and a repeatable calming sequence."],
+["If Ready","As sleep consolidates, experiment with more predictable naps/bedtime and independent settling only insofar as it works for this baby and family."],
+["Together","Bedtime is entirely co-regulated: feeding, rocking, reading, singing and calming are things you do with him."],
+["Wait / Not Applicable","Self-managed routines, sleep rewards, clocks, bedtime responsibility and 'good sleep habits' as a child responsibility are not infant tasks."]
+],
+"0–1|Food & cooking":[
+["Right Now","Milk is primary early; around developmental readiness, explore varied tastes, textures, grasping, chewing, cups and family foods in safe forms."],
+["If Ready","Finger foods, utensils and more complex textures can advance with sitting, oral-motor skill and safe swallowing—not merely birthday."],
+["Together","Family meals, touching food, watching adults eat and gradually sharing versions of family dishes."],
+["Wait / Not Applicable","Picky-eating strategy, nutrition lessons, cooking responsibility, dessert rules and cleaning a plate are not infant responsibilities."]
+],
+"0–1|Self-care & chores":[
+["Right Now","No chores. The useful developmental work is participating in dressing, diapering, bathing and ordinary care."],
+["If Ready","Near the end of the band, simple participation such as arms through sleeves or handing an object can emerge naturally."],
+["Together","Narrate care and let him participate physically where possible."],
+["Wait / Not Applicable","Responsibility for cleanliness, tidying, toileting, tooth-brushing or household contribution belongs later."]
+],
+"0–1|Money":[
+["Right Now","Not applicable as a child-development task."],
+["If Ready","Still not meaningfully applicable; handling objects or containers is sensorimotor play, not money education."],
+["Together","Normal family life can include shopping, but no lesson is required."],
+["Wait / Not Applicable","Allowance, saving, giving categories, paid work and purchase consequences should wait until money is conceptually meaningful."]
+],
+"0–1|Play & independence":[
+["Right Now","Give warm interaction plus safe opportunities to look, reach, roll, manipulate objects and remain content without continuous adult entertainment."],
+["If Ready","As mobility grows, expand the safe exploration zone and let him work at reachable physical problems before intervening."],
+["Together","Floor play, peekaboo, songs, books and exploring ordinary safe objects with a parent."],
+["Wait / Not Applicable","Territory freedom, home-alone skills, boredom coaching and independent social plans obviously belong later."]
+],
+"0–1|Physical":[
+["Right Now","Floor time, tummy time, reaching, rolling, sitting, crawling, pulling up and eventually walking according to individual development."],
+["If Ready","Offer the environment for the next movement rather than pushing milestone acceleration."],
+["Together","Carry, play on the floor, go outside, visit playground spaces appropriately and introduce water pleasantly."],
+["Wait / Not Applicable","Organized sports, exercise programming, strength training and performance goals are not infant development."]
+],
+"0–1|Learning":[
+["Right Now","Talk, respond to babbling, read aloud, sing, name the world and allow sensory exploration."],
+["If Ready","Follow attention: a baby fascinated by books, objects, sounds or cause-and-effect can get more of that without turning it into curriculum."],
+["Together","Nearly all learning is relational and embedded in ordinary life."],
+["Wait / Not Applicable","Letters, numbers, flashcards, educational apps, formal lessons and academic acceleration provide no necessary target here."]
+],
+"0–1|Chinese":[
+["Right Now","Use Chinese naturally with family so its sounds, rhythms and people are part of normal life."],
+["If Ready","No acceleration needed; increasing babble/word comprehension simply gives more opportunity for responsive Chinese conversation."],
+["Together","Grandparent video calls, songs, board books and ordinary parent speech."],
+["Wait / Not Applicable","Character recognition, drills, translation and formal language lessons are unnecessary."]
+],
+"0–1|Faith":[
+["Right Now","Bring him into ordinary Christian family and church life: worship, prayer, songs, Scripture and relationships in the congregation."],
+["If Ready","As attention grows, very short Bible stories, pictures or repeated songs can become enjoyable."],
+["Together","All faith practice is participation with family at this age."],
+["Wait / Not Applicable","Doctrinal comprehension, catechism performance, personal devotional responsibility or conversion milestones are not infant targets."]
+],
+"0–1|Social & emotional":[
+["Right Now","Responsive caregiving, faces, conversation, comfort and predictable relationships build the foundation."],
+["If Ready","As social bids and stranger awareness grow, follow temperament rather than demanding sociability."],
+["Together","Regulation is parent-led co-regulation: comfort first, with gradually richer emotional interaction."],
+["Wait / Not Applicable","Sharing, apologies, conflict resolution, manners and self-regulation expectations belong later."]
+],
+"0–1|Media":[
+["Right Now","There is little developmental need for entertainment screens; video calls with real people are a different use case."],
+["If Ready","Near the end of infancy, an occasional brief shared family-media moment need not become a developmental project."],
+["Together","If a screen is used, shared and contextualized is preferable to handing over a personal feed."],
+["Wait / Not Applicable","Independent viewing, algorithmic feeds and personal screen ownership are unnecessary."]
+],
+"0–1|Technology":[
+["Right Now","Not applicable as a competence goal."],
+["If Ready","No need to accelerate. Pressing buttons on household objects is exploration, not digital literacy."],
+["Together","Video calls can connect him with grandparents; adults operate the device."],
+["Wait / Not Applicable","Computing skills, internet literacy, personal devices and app autonomy belong much later."]
+],
+"0–1|Family & community":[
+["Right Now","Belong: grandparents, church, friends, guests, errands and normal family life are the curriculum."],
+["If Ready","As social awareness grows, include him rather than designing child-only experiences around everything."],
+["Together","Attend meals, visits, church and community events with normal flexibility around routines."],
+["Wait / Not Applicable","He has no responsibility yet to maintain family relationships or community commitments."]
+],
+
+"1–3|Sleep & rhythm":[
+["Right Now","Parents maintain a predictable bedtime and nap/quiet rhythm while the toddler begins participating in the sequence."],
+["If Ready","Let the child choose pajamas/books, climb into bed and complete tiny routine steps independently."],
+["Together","Use connection—books, song, prayer, cuddles—while keeping the boundary that bedtime still happens."],
+["Wait","Do not hand over bedtime timing or expect a toddler to manage sleep needs independently."]
+],
+"1–3|Self-care & chores":[
+["Right Now","Put toys in a basket, clothes in hamper, carry safe dishes, wipe a spill and participate in dressing/handwashing."],
+["If Ready","A capable toddler can do more steps independently, but competence should not turn into perfection standards."],
+["Together","Do household work beside the child: 'help me unload this' rather than a chore chart bureaucracy."],
+["Wait","Allowance-linked chores, fully independent hygiene and responsibility for household standards belong later."]
+],
+"1–3|Learning":[
+["Right Now","Read aloud, converse, pretend, build, draw, explore outside and answer endless questions."],
+["If Ready","Interest in letters, counting or patterns can be followed playfully without converting it into an academic program."],
+["Together","Puzzles, cooking, errands, books and conversation provide plenty of guided learning."],
+["Wait","Being able to memorize letters or numbers is not a reason to replace play with school."]
+],
+"1–3|Chinese":[
+["Right Now","Prioritize understanding and spontaneous everyday speech with parents and grandparents."],
+["If Ready","Follow interest in Chinese books, songs or repeated characters, but spoken relationship remains the priority."],
+["Together","Read familiar stories, video-call family and use Chinese for actual wants, play and routines."],
+["Wait","Formal literacy targets and workbook-style study are unnecessary."]
+],
+"1–3|Technology":[
+["Right Now","No personal-device competence goal. Household technology can remain adult-operated."],
+["If Ready","A child can begin simple shared mouse/touch interactions when they serve a specific family activity."],
+["Together","Video calls and an occasional parent-selected game are shared activities."],
+["Wait","Independent internet use, personal tablets and algorithmic media are not needed."]
+],
+
+"3–5|Learning":[
+["Right Now","Protect play while building language, phonological awareness, number sense, drawing, puzzles and curiosity."],
+["If Ready","A child who is genuinely decoding can read; one who loves arithmetic can go further. Follow ability without making advancement the goal."],
+["Together","Read sophisticated stories aloud well beyond independent reading level and discuss them."],
+["Wait","Advanced decoding does not imply readiness for older emotional themes, long desk work or older-peer expectations."]
+],
+"3–5|Media":[
+["Right Now","Curated family TV, movies and simple games can be normal entertainment alongside books, play and movement."],
+["If Ready","Advance game complexity when controls and frustration tolerance support it; advance stories when emotional comprehension supports them."],
+["Together","Co-play and co-view older-but-manageable material and talk about confusing/scary parts."],
+["Wait","Avoid using mere technical ability as the reason for unrestricted YouTube, feeds or substantially older content."]
+],
+"3–5|Technology":[
+["Right Now","Use shared household screens; begin basic mouse/keyboard familiarity if naturally useful."],
+["If Ready","A motivated child can learn simple computer navigation or creative software with an adult."],
+["Together","Family PC/console use keeps technology social and observable."],
+["Wait","Personal connected devices and independent internet access solve no necessary developmental problem here."]
+],
+
+"5–8|Learning":[
+["Right Now","Build fluent reading, comprehension, writing, arithmetic and broad knowledge while preserving play and read-alouds."],
+["If Ready","Let demonstrated readers tackle harder books and demonstrated mathematicians move ahead in concepts without assuming global maturity."],
+["Together","Use read-alouds, museums, projects and discussion to access ideas beyond independent skill."],
+["Wait","A six-year-old reading at a ten-year-old level is still six socially and emotionally; don't manufacture acceleration in unrelated domains."]
+],
+"5–8|Media":[
+["Right Now","Shared and independent curated games/books/movies can broaden substantially."],
+["If Ready","Mechanical skill can unlock harder games; listening comprehension can unlock older read-alouds; emotional maturity governs themes."],
+["Together","Parent co-play is an excellent bridge for games that are slightly too complex independently."],
+["Wait","Do not equate reading ability with readiness for every book aimed at older children."]
+],
+"5–8|Technology":[
+["Right Now","Learn keyboard, mouse, files, typing, saving, drawing/creating and basic supervised search on shared computers."],
+["If Ready","A technically curious child can program, mod or create far ahead of age while internet/privacy boundaries remain age-appropriate."],
+["Together","Research, troubleshoot and make things with a parent nearby."],
+["Wait","Advanced computing skill is not evidence of readiness for private connected devices, social media or unrestricted internet."]
+],
+"5–8|Play & independence":[
+["Right Now","Grow independent play, friend play, household freedom and small geographic freedoms appropriate to the environment."],
+["If Ready","Expand territory when the child reliably follows boundaries, navigates and responds to unexpected situations."],
+["Together","Walk routes, cross streets, visit nearby places and practice decisions before solo freedom."],
+["Wait","Traffic, water and other high-consequence hazards require competence beyond confidence."]
+],
+
+"8–12|Learning":[
+["Right Now","Strengthen independent learning: reading, writing, math, research, projects, source evaluation and study habits."],
+["If Ready","Deep specialization is fine when driven by durable interest; advanced coursework can follow demonstrated mastery."],
+["Together","Discuss difficult books, research questions and projects without taking ownership away from the child."],
+["Wait","Being academically advanced does not require an adult workload or sacrificing sleep, friends and unstructured life."]
+],
+"8–12|Technology":[
+["Right Now","Build internet literacy and productive computer use primarily through shared/managed hardware."],
+["If Ready","Increase web independence after demonstrated judgment, honesty and ability to seek help when something goes wrong."],
+["Together","Research, create, game and communicate in contexts where parents remain available."],
+["Wait","A personal smartphone or social-media account is a separate readiness decision, not the reward for computer competence."]
+],
+"8–12|Play & independence":[
+["Right Now","Progress in neighborhood navigation, home-alone readiness, making plans and managing time."],
+["If Ready","Freedom can move earlier with reliable judgment, route knowledge, communication and a safe environment."],
+["Together","Rehearse emergencies, routes, store/library interactions and increasingly independent errands."],
+["Wait","Do not expand freedom merely to match peers when the child or environment is not ready."]
+],
+
+"12–15|Technology":[
+["Right Now","Reassess actual communication, school and transportation needs while teaching deliberate use of connected technology."],
+["If Ready","A restricted or full smartphone can become an apprenticeship tool when judgment and family need justify it."],
+["Together","Set initial expectations collaboratively: apps, nighttime charging, privacy, communication and what happens when something goes wrong."],
+["Wait","Social media and unrestricted algorithmic feeds remain separate decisions from owning a phone."]
+],
+"12–15|Learning":[
+["Right Now","Transfer ownership of school workflow, deadlines and asking for help while supporting serious interests."],
+["If Ready","Advanced classes or deep independent study can expand when the teenager wants the tradeoff."],
+["Together","Parents advise on workload and strategy rather than becoming project managers."],
+["Wait","Prestige optimization is not automatically worth sacrificing sleep, relationships, church, exercise or genuine interests."]
+],
+
+"15–18|Technology":[
+["Right Now","Move toward adult digital autonomy, privacy and self-management before leaving home."],
+["If Ready","Most controls can disappear as demonstrated responsibility makes them unnecessary."],
+["Together","Discuss difficult cases, scams, pornography, relationships, AI, reputation, privacy and attention as adult problems."],
+["Wait","Permanent parental surveillance should not be the plan for producing an independent adult."]
+],
+"15–18|Money":[
+["Right Now","Manage increasingly real spending, work income, saving, giving and recurring expenses."],
+["If Ready","Add banking, investing, taxes, credit and larger budgets as actual life makes them relevant."],
+["Together","Review major decisions and mistakes without taking every decision back over."],
+["Wait","Do not manufacture high-stakes financial exposure merely to teach a lesson."]
+]
+};
+let tab="Today";
+const tabs=["Today","By Age","By Domain","Drilldown","Principles","Family Decisions"];
+const $=s=>document.querySelector(s);
+function init(){
+ $("#age").innerHTML=ages.map(a=>`<option>${a}</option>`).join("");
+ $("#domain").innerHTML=domains.map(d=>`<option>${d}</option>`).join("");
+ $("#tabs").innerHTML=tabs.map(t=>`<button data-t="${t}">${t}</button>`).join("");
+ document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>{tab=b.dataset.t;render()});
+ ["age","domain","search"].forEach(id=>$("#"+id).oninput=render); render();
+}
+function filt(){
+ const a=$("#age").value,d=$("#domain").value,q=$("#search").value.toLowerCase();
+ return items.filter(x=>x[0]===a&&x[1]===d&&(!q||x.join(" ").toLowerCase().includes(q)));
+}
+function card(x,cls=""){
+ return `<div class="card ${cls}"><div class="meta">${x[0]} · ${x[1]} · <span class="pill">${x[2]}</span> <span class="pill">${x[3]}</span></div><h3>${x[5]}</h3><p>${x[6]}</p></div>`;
+}
+function render(){
+ document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("active",b.dataset.t===tab));
+ const a=$("#age").value,d=$("#domain").value; let html="";
+ $("#ageControl").style.display = (tab==="By Age"||tab==="Drilldown") ? "" : "none";
+ $("#domainControl").style.display = (tab==="By Domain"||tab==="Drilldown") ? "" : "none";
+ $("#search").style.display = (tab==="By Age"||tab==="By Domain"||tab==="Drilldown"||tab==="Family Decisions") ? "" : "none";
+ if(tab==="Principles"){
+   html=`<div class="section"><h2>Family principles</h2><div class="card">${principles.map((p,i)=>`<div class="principle"><b>${i+1}. ${p[0]}</b><br>${p[1]}</div>`).join("")}</div></div>`;
+ } else if(tab==="Family Decisions"){
+   const q=$("#search").value.toLowerCase();
+   const dec=items.filter(x=>x[3]==="Discuss later"||x[3]==="Proposed").filter(x=>!q||x.join(" ").toLowerCase().includes(q));
+   html=`<div class="section"><h2>Not canon yet</h2><p class="sub">These are working proposals or future decisions. They are here to support a Mom-and-Dad conversation, not settle it.</p><div class="grid">${dec.slice(0,30).map(x=>card(x,x[3]==="Discuss later"?"discuss":"")).join("")}</div></div>`;
+ } else if(tab==="Drilldown"){
+   const ageTitle=a, domainTitle=d;
+   const custom = readiness[a+"|"+d];
+   html=`<div class="section"><h2>Drilldown · ${ageTitle} · ${domainTitle}</h2>
+   <p class="sub">This view uses the intersection of the selected age and domain. Age establishes the default; demonstrated skill, maturity, experience and the consequences of failure determine whether something can move earlier—or should wait.</p></div>`;
+   if(custom) {
+     html+=ready(d);
+   } else {
+     html+=`<div class="section card"><h2>Not implemented yet</h2>
+       <p>This age/domain combination does not yet have a specialized readiness drilldown. The normal roadmap guidance still applies, but we haven't written useful <b>Right Now / If Ready / Together / Wait</b> distinctions for this domain yet.</p>
+       <p class="meta">Better to mark this honestly than fill the roadmap with generic boilerplate.</p></div>`;
+   }
+ } else if(tab==="By Domain"){
+   const q=$("#search").value.toLowerCase();
+   // Domain view intentionally ignores the shared age state: one domain across ALL age bands.
+   const data=items.filter(x=>x[1]===d&&(!q||x.join(" ").toLowerCase().includes(q)));
+   html=`<div class="section"><h2>${d} across childhood</h2><p class="sub">This view follows one domain across every age band. The stored age selection is used only when you switch to By Age or Drilldown.</p><div class="grid">${data.map(x=>card(x)).join("")||'<div class="empty">No matching items.</div>'}</div></div>`;
+ } else if(tab==="By Age"){
+   const q=$("#search").value.toLowerCase();
+   // Age view intentionally ignores the shared domain state: one age across ALL domains.
+   const data=items.filter(x=>x[0]===a&&(!q||x.join(" ").toLowerCase().includes(q)));
+   html=`<div class="section"><h2>Age ${a}</h2><p class="sub">This view shows every roadmap domain for the selected age band. The stored domain selection is used only when you switch to By Domain or Drilldown.</p><div class="grid">${data.map(x=>card(x)).join("")||'<div class="empty">No matching items.</div>'}</div></div>`;
+ } else {
+   const todayAge="0–1";
+   let data=items.filter(x=>x[0]===todayAge); const now=data.filter(x=>x[4]==="now"),later=data.filter(x=>x[4]==="later");
+   const next=ages[ages.indexOf(todayAge)+1], soon=next?items.filter(x=>x[0]===next).slice(0,6):[];
+   html=`<div class="section"><h2>What matters now · ${todayAge}</h2><div class="grid">${now.map(x=>card(x,"now")).join("")||'<div class="empty">No matching items.</div>'}</div></div>
+   <div class="section"><h2>Coming next</h2><div class="grid">${soon.map(x=>card(x,"soon")).join("")||'<div class="empty">No next-stage items.</div>'}</div></div>
+   <div class="section"><h2>Not yet / no need to rush</h2><div class="grid">${later.map(x=>card(x,"later")).join("")||`<div class="card later"><h3>Most later-stage responsibilities</h3><p>Use the age and domain views when you're curious; they don't need attention yet.</p></div>`}</div></div>`;
+ }
+ $("#content").innerHTML=html;
+}
+function ready(d){const key=$("#age").value+"|"+d; const rows=readiness[key]; return `<div class="section readiness card"><h2>Readiness drilldown · ${$("#age").value} · ${d}</h2><div class="grid">${rows.map(r=>`<div><h3>${r[0]}</h3><p>${r[1]}</p></div>`).join("")}</div><p class="meta">Age establishes the default → actual child modifies readiness → parents choose the implementation.</p></div>`}
+init();
+</script></body></html>
