@@ -20,6 +20,8 @@ jobs:
         run: node scripts/update-v08.js
       - name: Apply v0.9 Media Tiers migration
         run: node scripts/update-v09.js
+      - name: Apply v0.10 toddler matrix migration
+        run: node scripts/update-v10.js
       - name: Run roadmap tests
         run: node tests/roadmap.test.js
       - name: Commit roadmap migrations when needed
@@ -29,5 +31,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Update roadmap to v0.9"
+          git commit -m "Update roadmap to v0.10"
           git push
