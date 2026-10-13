@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Family Development Roadmap — Draft 0.1</title>
+<title>Family Development Roadmap — Draft 0.7</title>
 <style>
 :root{--bg:#f6f5f0;--card:#fff;--ink:#222;--muted:#6a6a63;--line:#deddd6;--accent:#345c4a;--soft:#e7eee9;--warn:#f4ead7}
 *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}
@@ -27,7 +27,7 @@ footer{max-width:1100px;margin:30px auto;padding:20px;color:var(--muted);font-si
 <body>
 <noscript><div style="max-width:1000px;margin:18px auto;padding:14px;background:#fff3cd;border:1px solid #d7b85b;border-radius:10px">This file viewer has JavaScript disabled. Open this HTML file in Safari or Chrome to use the roadmap.</div></noscript>
 <header>
-<span class="pill">DRAFT 0.1</span>
+<span class="pill">DRAFT 0.7</span>
 <h1>Family Development Roadmap</h1>
 <p class="sub">A planning tool, not a childhood optimization engine. Age establishes a default; the actual child modifies readiness; parents choose the implementation.</p>
 </header>
@@ -40,7 +40,7 @@ footer{max-width:1100px;margin:30px auto;padding:20px;color:var(--muted);font-si
 </div>
 <div id="content"></div>
 </main>
-<footer>Draft 0.6 • Strong defaults, weak rigidity • Future Mom, Dad, actual child, and actual circumstances all get a vote.</footer>
+<footer>Draft 0.7 • Strong defaults, weak rigidity • Future Mom, Dad, actual child, and actual circumstances all get a vote.</footer>
 <script>
 const ages=["0–1","1–3","3–5","5–8","8–12","12–15","15–18"];
 const domains=["Sleep & rhythm","Food & cooking","Self-care & chores","Money","Play & independence","Physical","Learning","Chinese","Faith","Social & emotional","Media","Technology","Family & community"];
@@ -62,14 +62,14 @@ const principles=[
 ["Delay decisions when the information doesn't exist yet","Future parents and the future child should decide future-specific questions."]
 ];
 const items=[
-["0–1","Sleep & rhythm","Core","Proposed","now","Safe sleep, adequate total sleep, and a repeatable but flexible family rhythm.","Parents regulate nearly everything; exact sleep-training method is a later family choice."],
-["0–1","Food & cooking","Core","Proposed","now","Milk feeding first; around developmental readiness, begin varied solids, textures and family flavors.","Exposure matters more than elaborate baby cuisine."],
-["0–1","Physical","Core","Proposed","now","Floor time, tummy time, reaching, rolling, crawling and ordinary movement.","No toddler exercise program required."],
-["0–1","Learning","Core","Proposed","now","Talk, respond, sing, read, name things and let him explore normal life.","Language and exploration are the academics."],
-["0–1","Chinese","High value","Proposed","now","Make Chinese a normal relationship language through parents, grandparents, songs and books.","People first; lessons later."],
-["0–1","Faith","High value","Proposed","now","Church, prayer, songs, Scripture around him and being known by the congregation.","No formal devotional pressure."],
-["0–1","Play & independence","High value","Proposed","now","Interact warmly while also letting a content baby look, grab, babble and occupy himself.","Constant entertainment is not required."],
-["0–1","Media","Optional","Proposed","later","Little ordinary entertainment screen need; video calls are different.","Family media can begin later without rushing personal screens."],
+["0–1","Sleep & rhythm","Core","Agreed","now","Safe sleep, adequate total sleep, and a repeatable but flexible family rhythm.","Parents regulate nearly everything; exact sleep-training method is a later family choice."],
+["0–1","Food & cooking","Core","Agreed","now","Milk feeding first; around developmental readiness, begin varied solids, textures and family flavors.","Exposure matters more than elaborate baby cuisine."],
+["0–1","Physical","Core","Agreed","now","Floor time, tummy time, reaching, rolling, crawling and ordinary movement.","No toddler exercise program required."],
+["0–1","Learning","Core","Agreed","now","Talk, respond, sing, read, name things and let him explore normal life.","Language and exploration are the academics."],
+["0–1","Chinese","High value","Agreed","now","Make Chinese a normal relationship language through parents, grandparents, songs and books.","People first; lessons later."],
+["0–1","Faith","High value","Agreed","now","Church, prayer, songs, Scripture around him and being known by the congregation.","No formal devotional pressure."],
+["0–1","Play & independence","High value","Agreed","now","Interact warmly while also letting a content baby look, grab, babble and occupy himself.","Constant entertainment is not required."],
+["0–1","Media","Optional","Agreed","later","Little ordinary entertainment screen need; video calls are different.","Family media can begin later without rushing personal screens."],
 ["1–3","Food & cooking","Core","Proposed","now","Move toward ordinary family food; parents choose what/when/where, child chooses whether/how much.","Include a familiar option without routinely cooking Meal #2."],
 ["1–3","Self-care & chores","High value","Proposed","now","Participate: toys in basket, clothes in hamper, wipe spills, carry dishes, help dress and wash.","Helping, not a wage job."],
 ["1–3","Play & independence","Core","Proposed","now","Normalize independent play and boredom alongside engaged parent play.","Don't turn every activity into a lesson."],
@@ -334,7 +334,7 @@ function render(){
  $("#domainControl").style.display = (tab==="By Domain"||tab==="Drilldown") ? "" : "none";
  $("#search").style.display = (tab==="By Age"||tab==="By Domain"||tab==="Drilldown"||tab==="Family Decisions") ? "" : "none";
  if(tab==="Principles"){
-   html=`<div class="section"><h2>Family principles</h2><div class="card">${principles.map((p,i)=>`<div class="principle"><b>${i+1}. ${p[0]}</b><br>${p[1]}</div>`).join("")}</div></div>`;
+   html=`<div class="section"><h2>Family principles <span class="pill">Agreed</span></h2><p class="sub">Mom and Dad aligned on these principles. They are the shared defaults for interpreting the roadmap, while the actual child and future circumstances still shape implementation.</p><div class="card">${principles.map((p,i)=>`<div class="principle"><b>${i+1}. ${p[0]}</b><br>${p[1]}</div>`).join("")}</div></div>`;
  } else if(tab==="Family Decisions"){
    const q=$("#search").value.toLowerCase();
    const dec=items.filter(x=>x[3]==="Discuss later"||x[3]==="Proposed").filter(x=>!q||x.join(" ").toLowerCase().includes(q));
