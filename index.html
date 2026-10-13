@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Family Development Roadmap — Draft 0.8</title>
+<title>Family Development Roadmap — Draft 0.9</title>
 <style>
 :root{--bg:#f6f5f0;--card:#fff;--ink:#222;--muted:#6a6a63;--line:#deddd6;--accent:#345c4a;--soft:#e7eee9;--warn:#f4ead7}
 *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}
@@ -27,7 +27,7 @@ footer{max-width:1100px;margin:30px auto;padding:20px;color:var(--muted);font-si
 <body>
 <noscript><div style="max-width:1000px;margin:18px auto;padding:14px;background:#fff3cd;border:1px solid #d7b85b;border-radius:10px">This file viewer has JavaScript disabled. Open this HTML file in Safari or Chrome to use the roadmap.</div></noscript>
 <header>
-<span class="pill">DRAFT 0.8</span>
+<span class="pill">DRAFT 0.9</span>
 <h1>Family Development Roadmap</h1>
 <p class="sub">A planning tool, not a childhood optimization engine. Age establishes a default; the actual child modifies readiness; parents choose the implementation.</p>
 </header>
@@ -40,7 +40,7 @@ footer{max-width:1100px;margin:30px auto;padding:20px;color:var(--muted);font-si
 </div>
 <div id="content"></div>
 </main>
-<footer>Draft 0.8 • Strong defaults, weak rigidity • Future Mom, Dad, actual child, and actual circumstances all get a vote.</footer>
+<footer>Draft 0.9 • Strong defaults, weak rigidity • Future Mom, Dad, actual child, and actual circumstances all get a vote.</footer>
 <script>
 const ages=["0–1","1–3","3–5","5–8","8–12","12–15","15–18"];
 const domains=["Sleep & rhythm","Food & cooking","Self-care & chores","Money","Play & independence","Physical","Learning","Chinese","Faith","Social & emotional","Media","Technology","Family & community"];
@@ -81,6 +81,14 @@ const mediaGuide={
 "Shows":[["Great now","Near-adult media choice with family conversation and ordinary household norms."],["Stretch together","Talk about algorithms, persuasion, pornography, misinformation and attention as adult digital-life issues."],["Save for later","Surveillance should not substitute for judgment development."]],
 "Movies":[["Great now","Near-adult choice; shared family movie culture can continue because it is enjoyable, not because Dad is curating childhood."],["Stretch together","Use genuinely difficult films as opportunities for conversation when wanted."],["Save for later","The roadmap should now be fading into personal judgment."]]}}
 ;
+const mediaTiers=[
+["S","Encourage","Activities we would actively like childhood to contain often: relationship, creativity, agency, sustained attention or real-world engagement.","Reading together; parent read-alouds; couch co-op with Dad/siblings; Minecraft Creative/building; creating art/music/stories; making things; family board games; media that becomes shared family culture."],
+["A","Good","Genuinely worthwhile leisure. No need to justify it as educational; it tends to involve mastery, thought, story, exploration or quality shared experience.","Independent reading; Zelda; strategy games; puzzle games; Metroid; Mario platformers; Pokémon; story-rich RPGs; excellent family films such as Ghibli; thoughtful documentaries and selected shows."],
+["B","Fine","Ordinary entertainment. Enjoyable and not concerning in a healthy mix, but we do not need to manufacture more of it.","Mario Kart or Smash played casually/solo; straightforward action games; silly movies; ordinary TV; non-manipulative casual/mobile games; intentional YouTube videos chosen for a reason."],
+["C","Limit","Can be fine in moderation, but often displaces richer activities or contains design patterns that make stopping harder.","Lots of passive viewing; repetitive low-quality kids media; grind-heavy live-service games; autoplay-heavy video; habitual background screens; watching other people play games for long stretches instead of playing/creating."],
+["D","Discourage","The product is substantially optimized around capturing attention, compulsion, FOMO or monetization rather than providing a bounded experience.","Algorithmic short-form feeds; endless content sludge; manipulative free-to-play loops; child-targeted gacha/FOMO systems; habitual doomscrolling; personalized feeds designed to keep going indefinitely."],
+["F","Avoid","Meaningfully harmful, exploitative or developmentally inappropriate rather than merely low-value entertainment.","Pornographic/explicit sexual material; real-money gambling; predatory online spaces; seriously age-inappropriate graphic content; exploitative monetization involving real gambling-like stakes."]
+];
 const principles=[
 ["Childhood is a gradual transfer of responsibility","Parent does → child participates → helps → does with supervision → owns → parent advises."],
 ["Build competence, not dependence","The endpoint is a capable adult, not an exceptionally well-managed child."],
@@ -371,9 +379,18 @@ function render(){
  $("#domainControl").style.display = (tab==="By Domain"||tab==="Drilldown") ? "" : "none";
  $("#search").style.display = (tab==="By Age"||tab==="By Domain"||tab==="Drilldown"||tab==="Family Decisions") ? "" : "none";
  if(tab==="Media Guide"){
-  ageControl.style.display=""; domainControl.style.display="none"; search.style.display="none";
-  const guide=mediaGuide[a];
-  content.innerHTML='<div class="section"><h2>Media Guide — '+a+'</h2><p class="sub">Examples, not a curriculum. Age is a starting point; comprehension, emotional maturity, motor skill, frustration tolerance and family context can move different media at different speeds.</p></div>'+Object.entries(guide).map(([kind,rows])=>'<div class="section"><h2>'+kind+'</h2><div class="grid">'+rows.map(([level,text])=>'<div class="card '+(level==='Great now'?'now':level==='Stretch together'?'soon':'later')+'"><div class="meta">'+level+'</div><p>'+text+'</p></div>').join('')+'</div></div>').join('');
+  domainControl.style.display="none"; search.style.display="none";
+  const view=localStorage.getItem("mediaView")||"age";
+  ageControl.style.display=view==="age"?"":"none";
+  const switcher='<div class="controls"><button id="mediaAge" class="'+(view==='age'?'active':'')+'">Age Guide</button><button id="mediaTier" class="'+(view==='tiers'?'active':'')+'">Media Tiers</button></div>';
+  if(view==="tiers"){
+    content.innerHTML=switcher+'<div class="section"><h2>Media Tiers</h2><p class="sub"><strong>We tier activities, not franchises.</strong> Content, context, child and usage can move the same media up or down. Social connection, creativity, agency, problem-solving, sustained attention, reading/narrative, mastery and meaningful choice tend to move an activity upward. Passivity, endlessness, algorithmic optimization, FOMO, compulsive rewards, monetization pressure and displacement of sleep/relationships/physical activity tend to move it downward.</p><p class="sub">Genre matters, but less than design and context: Zelda is typically richer than a straightforward action game, but a family Mario Kart tournament can be S-tier family time. A child who loves mastering Mario is not better served by being assigned a puzzle game merely because it looks educational.</p></div><div class="grid">'+mediaTiers.map(([tier,name,why,examples])=>'<div class="card"><h3>'+tier+' — '+name+'</h3><p>'+why+'</p><div class="meta">Examples</div><p>'+examples+'</p></div>').join('')+'</div>';
+  } else {
+    const guide=mediaGuide[a];
+    content.innerHTML=switcher+'<div class="section"><h2>Media Guide — '+a+'</h2><p class="sub">Examples, not a curriculum. Age is a starting point; comprehension, emotional maturity, motor skill, frustration tolerance and family context can move different media at different speeds.</p></div>'+Object.entries(guide).map(([kind,rows])=>'<div class="section"><h2>'+kind+'</h2><div class="grid">'+rows.map(([level,text])=>'<div class="card '+(level==='Great now'?'now':level==='Stretch together'?'soon':'later')+'"><div class="meta">'+level+'</div><p>'+text+'</p></div>').join('')+'</div></div>').join('');
+  }
+  document.getElementById("mediaAge").onclick=()=>{localStorage.setItem("mediaView","age");render()};
+  document.getElementById("mediaTier").onclick=()=>{localStorage.setItem("mediaView","tiers");render()};
   return;
 }
 if(tab==="Principles"){
