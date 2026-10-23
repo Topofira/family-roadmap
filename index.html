@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Family Development Roadmap — Draft 0.14</title>
+<title>Family Development Roadmap — Draft 0.15</title>
 <style>
 :root{--bg:#f6f5f0;--card:#fff;--ink:#222;--muted:#6a6a63;--line:#deddd6;--accent:#345c4a;--soft:#e7eee9;--warn:#f4ead7}
 *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}
@@ -27,7 +27,7 @@ footer{max-width:1100px;margin:30px auto;padding:20px;color:var(--muted);font-si
 <body>
 <noscript><div style="max-width:1000px;margin:18px auto;padding:14px;background:#fff3cd;border:1px solid #d7b85b;border-radius:10px">This file viewer has JavaScript disabled. Open this HTML file in Safari or Chrome to use the roadmap.</div></noscript>
 <header>
-<span class="pill">DRAFT 0.14</span>
+<span class="pill">DRAFT 0.15</span>
 <h1>Family Development Roadmap</h1>
 <p class="sub">A planning tool, not a childhood optimization engine. Age establishes a default; the actual child modifies readiness; parents choose the implementation.</p>
 </header>
@@ -40,7 +40,7 @@ footer{max-width:1100px;margin:30px auto;padding:20px;color:var(--muted);font-si
 </div>
 <div id="content"></div>
 </main>
-<footer>Draft 0.14 • Strong defaults, weak rigidity • Future Mom, Dad, actual child, and actual circumstances all get a vote.</footer>
+<footer>Draft 0.15 • Strong defaults, weak rigidity • Future Mom, Dad, actual child, and actual circumstances all get a vote.</footer>
 <script>
 const ages=["0–1","1–3","3–5","5–8","8–12","12–15","15–18"];
 const domains=["Sleep & rhythm","Food & cooking","Self-care & chores","Money","Play & independence","Physical","Learning","Chinese","Faith","Social & emotional","Media","Technology","Family & community"];
@@ -88,6 +88,25 @@ const mediaTiers=[
 ["C","Limit","Can be fine in moderation, but often displaces richer activities or contains design patterns that make stopping harder.","Lots of passive viewing; repetitive low-quality kids media; grind-heavy live-service games; autoplay-heavy video; habitual background screens; watching other people play games for long stretches instead of playing/creating."],
 ["D","Discourage","The product is substantially optimized around capturing attention, compulsion, FOMO or monetization rather than providing a bounded experience.","Algorithmic short-form feeds; endless content sludge; manipulative free-to-play loops; child-targeted gacha/FOMO systems; habitual doomscrolling; personalized feeds designed to keep going indefinitely."],
 ["F","Avoid","Meaningfully harmful, exploitative or developmentally inappropriate rather than merely low-value entertainment.","Pornographic/explicit sexual material; real-money gambling; predatory online spaces; seriously age-inappropriate graphic content; exploitative monetization involving real gambling-like stakes."]
+];
+const toyGuide={
+"0–1":[["Great staples","Rattles, teethers, mirrors, textured objects, stacking cups, balls and safe household objects for grasping and cause/effect."],["Nice additions","Simple push/pull or cause-and-effect toys; a few comforting plush toys."],["Mostly unnecessary","Large collections, flashy electronic toys and products marketed as required developmental stimulation."]],
+"1–3":[["Great staples","Blocks/Duplo, balls, vehicles, dolls or plush, simple pretend props, shape sorters, puzzles and crayons."],["Nice additions","Play kitchen, train sets, dress-up pieces and beloved character toys that invite imitation and stories."],["Mostly unnecessary","Huge toy inventories or button-press toys that mostly perform while the child watches."]],
+"3–5":[["Great staples","Duplo/Lego, blocks, Magna-Tiles or similar construction, figures/dolls/plush, dress-up, art supplies, vehicles and pretend-play props."],["Nice additions","Playsets, puzzles, simple board games and occasional novelty or electronic toys the child genuinely enjoys."],["Mostly unnecessary","Constant new toys, narrow single-purpose products and collecting systems where acquiring more crowds out actual play."]],
+"5–8":[["Great staples","Lego/construction, art and making supplies, board/card games, figures and imaginative play, outdoor/movement gear and puzzles."],["Nice additions","Science/building kits, character collections, Pokémon cards or similar collecting/trading hobbies when they lead to play, sorting, trading or strategy."],["Mostly unnecessary","Mystery products bought mainly for repeated reveals, excessive branded playsets and novelty churn."]],
+"8–12":[["Great staples","Construction sets, strategy/board games, models, art/music supplies, hobby equipment, maker/electronics kits and things that support sustained projects."],["Nice additions","Collectibles and trading cards, including randomized packs, when spending is bounded and the collection supports social play, strategy or genuine interest."],["Mostly unnecessary","Acquisition-first collectible ecosystems driven by scarcity, FOMO or constant purchasing rather than using the collection."]],
+"12–15":[["Great staples","Let toys become hobbies: models, games, maker tools, instruments, art supplies, sports gear, collections and creative equipment."],["Nice additions","Novelty, collectibles and fandom merchandise that fit the teen's real interests and budget."],["Mostly unnecessary","Parents curating a developmental toy program for a teenager; manipulative spending loops remain worth resisting."]],
+"15–18":[["Great staples","No need to distinguish toys from hobbies. Games, Lego, models, art, tools, collectibles and playful interests can remain worthwhile at any age."],["Nice additions","Whatever is genuinely enjoyed, affordable and compatible with adult responsibilities."],["Mostly unnecessary","The idea that mature people must stop playing; the concern is compulsive acquisition or displacement, not whether an object counts as a toy."]]
+};
+const toyPrinciples=[
+["More play inside the child","Prefer toys that invite building, imagining, moving, making, solving or social play over toys whose main function is performing for the child."],
+["Open-ended is a strong default, not a purity test","Duplo/Lego, blocks, art materials and pretend props are unusually reusable. A ridiculous electronic dinosaur can also be excellent fun."],
+["Figures and plush are real play tools","Pokémon plush, dolls, animals, action figures and vehicles can support stories, roles, language and attachment. They are worthwhile without being required."],
+["Educational marketing is not the metric","Sustained self-directed play with Lego, cardboard, figures or a ball may be more valuable than a product sold as educational."],
+["Collecting can be healthy","Cards, figures and mystery items can involve sorting, trading, strategy, social connection and simple delight. Randomness alone does not make a toy harmful."],
+["Watch the acquisition loop","Move downward when opening/buying becomes the main activity, especially with engineered scarcity, FOMO, repeated randomized spending or pressure to complete a collection."],
+["Fewer, better, accessible","Keep useful favorites available, rotate excess if helpful, and periodically donate or sell outgrown toys without turning minimalism into a family ideology."],
+["Ownership grows with age","Toy cleanup starts as participation, becomes a real responsibility, and later connects naturally to allowance, selling, donating and caring for possessions."]
 ];
 const principles=[
 ["Childhood is a gradual transfer of responsibility","Parent does → child participates → helps → does with supervision → owns → parent advises."],
@@ -200,6 +219,7 @@ const readiness={
 // v5-8-complete
 // v8-12-complete
 // vteen-transfer-complete
+// vtoy-guide
 "0–1|Sleep & rhythm":[
 ["Right Now","Parents own sleep regulation: safe sleep environment, day/night cues, feeding needs and a repeatable calming sequence."],
 ["If Ready","As sleep consolidates, experiment with more predictable naps/bedtime and independent settling only insofar as it works for this baby and family."],
@@ -468,7 +488,7 @@ const readiness={
 ]
 };
 let tab="Today";
-const tabs=["Today","By Age","By Domain","Drilldown","Media Guide","Principles","Family Decisions"];
+const tabs=["Today","By Age","By Domain","Drilldown","Media Guide","Play & Toys","Principles","Family Decisions"];
 const $=s=>document.querySelector(s);
 function init(){
  $("#age").innerHTML=ages.map(a=>`<option>${a}</option>`).join("");
@@ -490,7 +510,7 @@ function render(){
  $("#ageControl").style.display = (tab==="By Age"||tab==="Drilldown") ? "" : "none";
  $("#domainControl").style.display = (tab==="By Domain"||tab==="Drilldown") ? "" : "none";
  $("#search").style.display = (tab==="By Age"||tab==="By Domain"||tab==="Drilldown"||tab==="Family Decisions") ? "" : "none";
- if(tab==="Media Guide"){
+ if((tab==="Media Guide"||tab==="Play & Toys")){
   domainControl.style.display="none"; search.style.display="none";
   const view=localStorage.getItem("mediaView")||"age";
   ageControl.style.display=view==="age"?"":"none";
@@ -505,6 +525,7 @@ function render(){
   document.getElementById("mediaTier").onclick=()=>{localStorage.setItem("mediaView","tiers");render()};
   return;
 }
+if(tab==="Play & Toys"){const rows=toyGuide[a]||toyGuide["3–5"];return '<section class="hero"><h2>Play & Toys</h2><p><strong>Prefer toys that create play over toys that mainly perform or encourage acquiring more toys.</strong> Open-ended construction is an unusually strong default, but childhood fun does not need to justify itself as educational.</p></section><section class="grid">'+rows.map(x=>'<article class="card"><h3>'+x[0]+'</h3><p>'+x[1]+'</p></article>').join('')+'</section><section><h2>Family toy principles</h2><div class="grid">'+toyPrinciples.map(x=>'<article class="card"><h3>'+x[0]+'</h3><p>'+x[1]+'</p></article>').join('')+'</div></section>';}
 if(tab==="Principles"){
    html=`<div class="section"><h2>Family principles <span class="pill">Agreed</span></h2><p class="sub">Mom and Dad aligned on these principles. They are the shared defaults for interpreting the roadmap, while the actual child and future circumstances still shape implementation.</p><div class="card">${principles.map((p,i)=>`<div class="principle"><b>${i+1}. ${p[0]}</b><br>${p[1]}</div>`).join("")}</div></div>`;
  } else if(tab==="Family Decisions"){
